@@ -296,17 +296,19 @@ li:hover {
 }
 
 .img_whats {
+    padding-right: 5px;
     width: 65px;
     border-radius: 3cm;
 }
 
 .img_instagram {
-    width: 52px;
+    padding-left: 9px;
+    width: 60px;
     border-radius: 3cm;
 }
 
 .img_facebook {
-
+    padding-right: 9px;
     width: 55px;
     border-radius: 3cm;
 }

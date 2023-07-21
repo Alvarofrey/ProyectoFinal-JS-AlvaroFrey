@@ -134,14 +134,13 @@ class Carrito {
 }
 
 class Producto {
-  constructor(id, nombre, precio, descripcion, imagen, categoria,preferenceId) {
+  constructor(id, nombre, precio, descripcion, imagen, categoria) {
     this.id = id;
     this.nombre = nombre;
     this.precio = precio;
     this.descripcion = descripcion;
     this.imagen = imagen;
     this.categoria = categoria;
-    this.preferenceId = preferenceId
 
   }
 }
@@ -166,26 +165,11 @@ botonesCategorias.forEach((boton) => {
     boton.classList.add("seleccionado");
     const productosPorCategoria = bd.registrosPorCategoria(boton.innerText);
     cargarProductos(productosPorCategoria);
-    Swal.fire({
-      position: 'center',
-      icon: 'info',
-      title: boton.innerText,
-      showConfirmButton: false,
-      timer: 1000
-    });
   });
 });
 
-
 const botonTodos = document.querySelector("#btnTodos");
 botonTodos.addEventListener("click", (event) => {
-  Swal.fire({
-    position: 'center',
-    icon: 'info',
-    title: 'Todos los Productos',
-    showConfirmButton: false,
-    timer: 1000
-  });
   event.preventDefault();
   quitarClaseSeleccionado();
   botonTodos.classList.add("seleccionado");
@@ -206,26 +190,21 @@ bd.traerRegistros().then((productos) => cargarProductos(productos));
 function cargarProductos(productos) {
   divProductos.innerHTML = "";
   for (const producto of productos) {
-    const productHTML = `
-      <div class="producto container">
-        <h3>${producto.nombre}</h3>
-        <p>$${producto.precio}</p>
-        <h6>${producto.descripcion}</h6>
-        <img class="img" src="img/${producto.imagen}" />
-        <div id="botonPago${producto.id}"></div>
-      </div>
+    divProductos.innerHTML += `
+        <div class="producto container">
+            <h3>${producto.nombre}</h3>
+            <p>$${producto.precio}</p>
+            <h6>${producto.descripcion}</h6>
+            <img class="img" src="img/${producto.imagen}" />
+            <p><a href="#" class="btnAgregar" data-id="${producto.id}">Agregar al carrito</a></p>
+      
+
+
+        </div>
     `;
-    divProductos.insertAdjacentHTML('beforeend', productHTML);
-
-    // Agregar botón de pago de Mercado Pago
-    const botonPago = document.createElement("script");
-    botonPago.src = "https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js";
-    botonPago.dataset.preferenceId = producto.preferenceId; // Preference ID del producto actual
-    botonPago.dataset.source = "button";
-    document.getElementById(`botonPago${producto.id}`).appendChild(botonPago);
   }
+  
 
-  // Agregar evento al botón de agregar al carrito
   const botonesAgregar = document.querySelectorAll(".btnAgregar");
   for (const boton of botonesAgregar) {
     boton.addEventListener("click", (event) => {
@@ -239,11 +218,10 @@ function cargarProductos(productos) {
         title: 'Su Producto fue agregado al carrito',
         showConfirmButton: false,
         timer: 1000
-      });
+      })
     });
   }
 }
-
 
 
 formBuscar.addEventListener("submit", (event) => {
